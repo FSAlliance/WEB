@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <!-- 声明一个视图解析器用来解析jsp页面 -->
+    <bean id="viewResolver"
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+            value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    <!-- 设定处理器映射 -->
+    <bean id="handlerMapping"
+        class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+
+    </bean>
+    <!-- 使用MultiActionController处理请求 -->
+    <bean id="paramResolver"
+        class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+        <property name="paramName">
+            <value>method</value>
+        </property>
+    </bean>
+    
+</beans>
