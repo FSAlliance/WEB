@@ -136,8 +136,8 @@ public class TabUser implements java.io.Serializable {
 		return this.dtCreateTime;
 	}
 
-	public void setDtCreateTime(Timestamp dtCreateTime) {
-		this.dtCreateTime = dtCreateTime;
+	public void setDtCreateTime(Timestamp string) {
+		this.dtCreateTime = string;
 	}
 
 	public Timestamp getDtLoginTime() {

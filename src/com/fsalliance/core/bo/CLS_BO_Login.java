@@ -1,5 +1,6 @@
 package com.fsalliance.core.bo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fsalliance.core.po.TabUser;
 import com.fsalliance.core.po.TabUserDAO;
 import com.fsalliance.core.util.CLS_FSAlliance_Error;
+import com.fsalliance.core.util.InvertCodeGenerator;
+import com.fsalliance.core.util.Tools;
 import com.fsalliance.core.vo.CLS_VO_Result;
 import com.fsalliance.core.vo.CLS_VO_User_I;
 
@@ -64,11 +67,16 @@ public class CLS_BO_Login {
 			tabUser.setSUserId(id);
 			tabUser.setSPhoneNum(user.getPhoneNum());
 			tabUser.setSPassword(user.getPassWord());
-			tabUser.setSInviteNum(user.getShareCode());
-			tabUser.setSName(user.getPhoneNum());
 			
+			tabUser.setSName(user.getPhoneNum());
+			String shareCode = InvertCodeGenerator.getStringRandom(6);
+			List<TabUser> list_user = tabUserDAO.findBySInviteNum(user.getShareCode());
+			tabUser.setSInviteNum(shareCode);
+			tabUser.setSParentId(list_user.get(0).getSParentId());
+//			tabUser.setDtCreateTime(Tools.translateTime(new Date()));
 			tabUserDAO.save(tabUser);
 			//result.setRet(ret);
+			
 		} else {
 			result.setRet(CLS_FSAlliance_Error.ERROR_USERID_EXIST);
 			return result;
