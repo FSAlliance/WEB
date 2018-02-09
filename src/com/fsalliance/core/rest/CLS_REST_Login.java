@@ -35,9 +35,9 @@ public class CLS_REST_Login {
 	public void register(HttpServletRequest req, HttpServletResponse resp, CLS_VO_User_I user) throws Exception{
 		resp.getWriter().print(JSONObject.fromObject(boLogin.registerUser(user)));
 	}
-	@RequestMapping("/getuserInfo")
-	public void getUserInfo(HttpServletRequest req, HttpServletResponse resp,String phoneNum) throws Exception{
-		resp.getWriter().print(JSONObject.fromObject(boLogin.getUserInfo(phoneNum)));
+	@RequestMapping("/getuserinfo")
+	public void getUserInfo(HttpServletRequest req, HttpServletResponse resp,CLS_VO_User_I user) throws Exception{
+		resp.getWriter().print(JSONObject.fromObject(boLogin.getuserInfo(user)));
 	}
 	@RequestMapping("/updateLoginTime")
 	public void updateLoginTime(HttpServletRequest req, HttpServletResponse resp, CLS_VO_User_I user) throws Exception{

@@ -101,17 +101,16 @@ public class CLS_BO_Login {
 	}
 	
 	//获取用户信息
-	public CLS_VO_Result getUserInfo(String  phoneNum){
+	public CLS_VO_Result getuserInfo(CLS_VO_User_I user){
 		CLS_VO_Result result = new CLS_VO_Result();
-		System.out.println("aaaaaaaaaaaaaaaaaaa");
-		List<TabUser> list = tabUserDAO.findBySPhoneNum(phoneNum);
-		System.out.println("qqqqqqqqqqq");
+		TabUser tabUser = tabUserDAO.findById(user.getUserId());
 		
-		if (list.size() <= 0) {
+		if (tabUser == null) {
 			result.setRet(CLS_FSAlliance_Error.ERROR_PARAM);
+			result.setContent(tabUser);
 		} else {
 			result.setRet(CLS_FSAlliance_Error.ERROR_OK);
-			result.setContent(list.get(0));
+			result.setContent(tabUser);
 		}
 		
 		
