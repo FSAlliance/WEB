@@ -102,6 +102,7 @@ public class CLS_BO_Login {
 	
 	//获取用户信息
 	public CLS_VO_Result getuserInfo(CLS_VO_User_I user){
+		
 		CLS_VO_Result result = new CLS_VO_Result();
 		TabUser tabUser = tabUserDAO.findById(user.getUserId());
 		
