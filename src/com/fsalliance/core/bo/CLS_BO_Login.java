@@ -1,5 +1,6 @@
 package com.fsalliance.core.bo;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -72,11 +73,18 @@ public class CLS_BO_Login {
 			String shareCode = InvertCodeGenerator.getStringRandom(6);
 			List<TabUser> list_user = tabUserDAO.findBySInviteNum(user.getShareCode());
 			tabUser.setSInviteNum(shareCode);
-			tabUser.setSParentId(list_user.get(0).getSParentId());
-//			tabUser.setDtCreateTime(Tools.translateTime(new Date()));
+			if (list_user.size() > 0) {
+				tabUser.setSParentId(list_user.get(0).getSUserId());
+			} else {
+				tabUser.setSParentId("aaaaaaa");
+			}
+		
+			 Timestamp ts = Timestamp.valueOf(Tools.translateTime(new Date()));  
+			
+			tabUser.setDtCreateTime(ts);
+			tabUser.setDtLoginTime(ts);
 			tabUserDAO.save(tabUser);
 			//result.setRet(ret);
-			
 		} else {
 			result.setRet(CLS_FSAlliance_Error.ERROR_USERID_EXIST);
 			return result;
