@@ -12,7 +12,9 @@ import java.net.URL;
 public class ConfigManager {
 
 //	private static final String PFILE = "/root/apache-tomcat-6.0.24/webapps/fshare/WEB-INF/classes";
-	private static final String PFILE = "root\\apache-tomcat-6.0.24\\webapps\\fshare\\WEB-INF\\classes\\config.properties";
+	//private static final String PFILE = "root\\apache-tomcat-6.0.24\\webapps\\fshare\\WEB-INF\\classes\\config.properties";
+	private static final String PFILE = "E:\\Software\\MyEclipse\\apache-tomcat-6.0.53\\webapps\\FSAlliance\\WEB-INF\\classes\\config.properties";
+	
 	private File m_file = null;
 
 	private long m_lastModifiedTime = 0;

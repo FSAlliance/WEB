@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fsalliance.core.bo.CLS_BO_Login;
 import com.fsalliance.core.vo.CLS_VO_User_I;
@@ -34,4 +35,13 @@ public class CLS_REST_Login {
 	public void register(HttpServletRequest req, HttpServletResponse resp, CLS_VO_User_I user) throws Exception{
 		resp.getWriter().print(JSONObject.fromObject(boLogin.registerUser(user)));
 	}
+	@RequestMapping("/getuserInfo")
+	public void getUserInfo(HttpServletRequest req, HttpServletResponse resp,String phoneNum) throws Exception{
+		resp.getWriter().print(JSONObject.fromObject(boLogin.getUserInfo(phoneNum)));
+	}
+	@RequestMapping("/updateLoginTime")
+	public void updateLoginTime(HttpServletRequest req, HttpServletResponse resp, CLS_VO_User_I user) throws Exception{
+		resp.getWriter().print(JSONObject.fromObject(boLogin.updateLoginTime(user)));
+	}
+	
 }

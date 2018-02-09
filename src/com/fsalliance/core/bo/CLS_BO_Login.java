@@ -23,10 +23,14 @@ public class CLS_BO_Login {
 	@Resource(name = "TabUserDAO")
 	private TabUserDAO tabUserDAO;
 	
+	/**
+	 * 登录
+	 * @param user 用户信息
+	 * @return
+	 */
 	public CLS_VO_Result login(CLS_VO_User_I user){
-		
 		CLS_VO_Result result = new CLS_VO_Result();
-		List<TabUser> list = tabUserDAO.findBySName(user.getPhoneNum());
+		List<TabUser> list = tabUserDAO.findBySPhoneNum(user.getPhoneNum());
 		if (list.size() <= 0) {
 			result.setRet(CLS_FSAlliance_Error.ERROR_USER_NOT_EXIST);
 			return result;
@@ -35,7 +39,7 @@ public class CLS_BO_Login {
 		boolean flag = false;
 		for (int i = 0; i < list.size(); i++) {
 			TabUser tabUser = list.get(i);
-			if (tabUser.getSPassword().equals(user.getPassWord())) {
+			if (tabUser.getSPassword().equals(user.getPassword())) {
 				flag = true;
 				tabUserR = tabUser;
 				break;
@@ -67,11 +71,11 @@ public class CLS_BO_Login {
 			String id = UUID.randomUUID().toString();
 			tabUser.setSUserId(id);
 			tabUser.setSPhoneNum(user.getPhoneNum());
-			tabUser.setSPassword(user.getPassWord());
+			tabUser.setSPassword(user.getPassword());
 			
 			tabUser.setSName(user.getPhoneNum());
 			String shareCode = InvertCodeGenerator.getStringRandom(6);
-			List<TabUser> list_user = tabUserDAO.findBySInviteNum(user.getShareCode());
+			List<TabUser> list_user = tabUserDAO.findBySInviteNum(user.getInviteNum());
 			tabUser.setSInviteNum(shareCode);
 			if (list_user.size() > 0) {
 				tabUser.setSParentId(list_user.get(0).getSUserId());
@@ -95,4 +99,47 @@ public class CLS_BO_Login {
 		return result;
 
 	}
+	
+	//获取用户信息
+	public CLS_VO_Result getUserInfo(String  phoneNum){
+		CLS_VO_Result result = new CLS_VO_Result();
+		System.out.println("aaaaaaaaaaaaaaaaaaa");
+		List<TabUser> list = tabUserDAO.findBySPhoneNum(phoneNum);
+		System.out.println("qqqqqqqqqqq");
+		
+		if (list.size() <= 0) {
+			result.setRet(CLS_FSAlliance_Error.ERROR_PARAM);
+		} else {
+			result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+			result.setContent(list.get(0));
+		}
+		
+		
+		return result;
+
+	}
+	
+	/**
+	 * 更新用户的登录时间
+	 * @param user
+	 * @return
+	 */
+	public CLS_VO_Result updateLoginTime(CLS_VO_User_I user) {
+		CLS_VO_Result result = new CLS_VO_Result();
+		TabUser tabUser = tabUserDAO.findById(user.getUserId());
+		if (tabUser == null) {
+			result.setRet(CLS_FSAlliance_Error.ERROR_USER_NOT_EXIST);
+		} else {
+			tabUser.setDtLoginTime(user.getLoginTime());
+			TabUser mergeUser = tabUserDAO.merge(tabUser);
+			if(mergeUser == null) {
+				result.setRet(CLS_FSAlliance_Error.ERROR_DB_EXCEPTION);
+			} else {
+				result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+				result.setContent(mergeUser);
+			}
+		}
+		return result;
+	}
+	
 }
