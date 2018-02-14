@@ -31,6 +31,7 @@ public class CLS_REST_Login {
 		resp.getWriter().print(JSONObject.fromObject(boLogin.queryUser()));
 	}
 	
+	
 	@RequestMapping("/register")
 	public void register(HttpServletRequest req, HttpServletResponse resp, CLS_VO_User_I user) throws Exception{
 		resp.getWriter().print(JSONObject.fromObject(boLogin.registerUser(user)));
