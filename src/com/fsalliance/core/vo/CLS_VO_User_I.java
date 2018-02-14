@@ -12,7 +12,6 @@ public class CLS_VO_User_I{
 
 	private String password;//密码
 	
-	private String path;//
 
 	private Timestamp createTime;//注册时间
 
@@ -66,14 +65,7 @@ public class CLS_VO_User_I{
 		this.password = password;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
+	
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -160,7 +152,7 @@ public class CLS_VO_User_I{
 				+ balanceNum + ", cashed=" + cashed + ", cashing=" + cashing
 				+ ", createTime=" + createTime + ", inviteNum=" + inviteNum
 				+ ", loginTime=" + loginTime + ", parentId=" + parentId
-				+ ", password=" + password + ", path=" + path + ", phoneNum="
+				+ ", password=" + password +  ", phoneNum="
 				+ phoneNum + ", scoreNum=" + scoreNum + ", userId=" + userId
 				+ ", userName=" + userName + ", userPic=" + userPic + "]";
 	}
