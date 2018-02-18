@@ -1,17 +1,35 @@
 package com.fsalliance.core.po;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -261,4 +279,90 @@ public class TabUserDAO extends HibernateDaoSupport {
 	public static TabUserDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (TabUserDAO) ctx.getBean("TabUserDAO");
 	}
+	
+	
+	/**
+	 * 更新登录时间
+	 * @param userId 用户ID
+	 * @param loginTime 登录时间
+	 * @return
+	 */
+	public int updateLoginTime(String userId, Timestamp loginTime){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER SET DT_LOGIN_TIME = ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, loginTime);
+		query.setParameter(1, userId);
+		int result = query.executeUpdate();
+		return result;
+	}
+	
+	/**
+	 * 更新支付宝帐号
+	 * @param userId 用户ID
+	 * @param alipayNum 支付宝帐号
+	 * @return
+	 */
+	public int updateAlipayNum(String userId, String alipayNum){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER t1,TAB_USER_ALIPAY t2 SET t1.S_ALIPAY_NUM = ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, alipayNum);
+		query.setParameter(1, userId);
+		int result = query.executeUpdate();
+		return result;
+	}
+	
+
+	/**
+	 * 更新用户名称
+	 * @param userId 用户ID
+	 * @param userName 用户名称
+	 * @return
+	 */
+	public int updateUserName(String userId, String userName){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER SET S_NAME = ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, userName);
+		query.setParameter(1, userId);
+		int result = query.executeUpdate();
+		return result;
+	}
+
+	/**
+	 * 更新密码
+	 * @param userId 用户ID
+	 * @param password 密码
+	 * @return
+	 */
+	public int updatePassword(String userId, String password){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER SET S_PASSWORD = ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, password);
+		query.setParameter(1, userId);
+		int result = query.executeUpdate();
+		return result;
+	}
+
+	/**
+	 * 更新用户头像
+	 * @param userId 用户ID
+	 * @param userName 用户头像路径
+	 * @return
+	 */
+	public int updateUserPhoto(String userId, String  path){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER SET S_USER_PIC = ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, path);
+		System.out.println(userId+"///////");
+		query.setParameter(1, userId);
+		int result = query.executeUpdate();
+		return result;
+		
+
+  }  
+
 }
