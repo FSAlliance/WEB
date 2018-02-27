@@ -8,6 +8,7 @@
 
 	<session-factory>
 		<mapping resource="com/fsalliance/core/po/TabUser.hbm.xml" />
+		<mapping resource="com/fsalliance/core/po/TabUserAlipay.hbm.xml" />
 		<mapping resource="com/fsalliance/core/po/TabFile.hbm.xml" />
 		<mapping
 			resource="com/fsalliance/core/po/TabComputer.hbm.xml" />

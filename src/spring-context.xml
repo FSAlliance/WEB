@@ -77,6 +77,8 @@
 	<context:component-scan base-package="com.fsalliance.core.rest" />
 	
 	<bean name="boLogin" class="com.fsalliance.core.bo.CLS_BO_Login"></bean>
+	<bean name="boUser" class="com.fsalliance.core.bo.CLS_BO_User"></bean>
+	<bean name="boUserOrder" class="com.fsalliance.core.bo.CLS_BO_User_Order"></bean>
 	<bean name="boUpload" class="com.fsalliance.core.bo.CLS_BO_Upload"></bean>
 	<bean name="boFoldOrFile" class="com.fsalliance.core.bo.CLS_BO_FoldOrFile"></bean>
 	<bean name="boFolderTree" class="com.fsalliance.core.bo.CLS_BO_FolderTree"></bean>
