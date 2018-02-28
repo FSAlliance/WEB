@@ -155,18 +155,19 @@ public class CLS_BO_User {
         // 获取系统默认的临时文件保存路径，该路径为Tomcat根目录下的temp文件夹
         String temp = System.getProperty("java.io.tmpdir");
         // 设置缓冲区大小为 5M
-        factory.setSizeThreshold(1024 * 1024 * 5);
+        factory.setSizeThreshold(1024 * 1024 * 10);
         // 设置临时文件夹为temp
         factory.setRepository(new File(temp));
         // 用工厂实例化上传组件,ServletFileUpload 用来解析文件上传请求
         ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
-        String path = null;
+        String file_name = null;
+        FileItem file_item = null;
         // 解析结果放在List中
         try {
             List<FileItem> list = servletFileUpload.parseRequest(req);
 
             for (FileItem item : list) {
-                String name = item.getFieldName();
+            	String name = item.getFieldName();
                 InputStream is = null;
 				try {
 					is = item.getInputStream();
@@ -174,17 +175,18 @@ public class CLS_BO_User {
 					e1.printStackTrace();
 				}
                 try {
-                    path = upload+"/"+item.getName();
+                	file_name = item.getName();
+                    String path = upload+"/"+item.getName();
                     inputStream2File(is, path);
-                    result.setRet(CLS_FSAlliance_Error.ERROR_OK);
-                	result.setContent(path);
-                    out.write(item.getName());  //这里我把服务端成功后，返回给客户端的是上传成功后路径
+                   
                     break;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
              }
-            
+            result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+        	
+            out.write("http://39.107.106.248:3389/FSAlliance/photo/" +file_name);  //这里我把服务端成功后，返回给客户端的是上传成功后路径
         	
         } catch (FileUploadException e) {
             e.printStackTrace();
