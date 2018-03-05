@@ -305,7 +305,7 @@ public class TabUserDAO extends HibernateDaoSupport {
 	 */
 	public int updateAlipayNum(String userId, String alipayNum){
 		StringBuffer strBuf = new StringBuffer();
-		strBuf.append(" UPDATE TAB_USER t1,TAB_USER_ALIPAY t2 SET t1.S_ALIPAY_NUM = ? WHERE S_USER_ID = ? ");
+		strBuf.append("UPDATE TAB_USER t SET t.S_ALIPAY_NUM = ? WHERE S_USER_ID = ? ");
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
 		query.setParameter(0, alipayNum);
 		query.setParameter(1, userId);
@@ -357,12 +357,26 @@ public class TabUserDAO extends HibernateDaoSupport {
 		strBuf.append(" UPDATE TAB_USER SET S_USER_PIC = ? WHERE S_USER_ID = ? ");
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
 		query.setParameter(0, path);
-		System.out.println(userId+"///////");
 		query.setParameter(1, userId);
 		int result = query.executeUpdate();
 		return result;
-		
-
-  }  
+  } 
+	
+	/**
+	 * 用户提现，更新余额
+	 * @param userId 用户ID
+	 * @param money 提现金额
+	 * @return
+	 */
+	public int updateBalance(String userId, Double money){
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" UPDATE TAB_USER SET D_BALANCE_NUM = D_BALANCE_NUM - ?, D_CASHING = D_CASHING + ? WHERE S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, money);
+		query.setParameter(1, money);
+		query.setParameter(2, userId);
+		int result = query.executeUpdate();
+		return result;
+  } 
 
 }

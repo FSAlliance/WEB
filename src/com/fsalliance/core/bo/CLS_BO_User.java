@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,16 +23,23 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.hibernate.mapping.Array;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fsalliance.core.po.TabCashRecord;
+import com.fsalliance.core.po.TabCashRecordDAO;
+import com.fsalliance.core.po.TabIncomeRecordDAO;
 import com.fsalliance.core.po.TabUser;
 import com.fsalliance.core.po.TabUserAlipay;
 import com.fsalliance.core.po.TabUserAlipayDAO;
 import com.fsalliance.core.po.TabUserDAO;
+import com.fsalliance.core.util.CLS_CreateMD5val;
 import com.fsalliance.core.util.CLS_FSAlliance_Commen;
 import com.fsalliance.core.util.CLS_FSAlliance_Error;
 import com.fsalliance.core.util.InvertCodeGenerator;
 import com.fsalliance.core.util.Tools;
+import com.fsalliance.core.vo.CLS_VO_IncomeRecord;
+import com.fsalliance.core.vo.CLS_VO_PresentRecord;
 import com.fsalliance.core.vo.CLS_VO_Result;
 import com.fsalliance.core.vo.CLS_VO_USER_ORDER;
 import com.fsalliance.core.vo.CLS_VO_User_I;
@@ -41,7 +52,12 @@ public class CLS_BO_User {
 	
 	@Resource(name = "TabUserAlipayDAO")
 	private TabUserAlipayDAO tabUserAlipayDAO;
-
+	
+	@Resource(name = "TabCashRecordDAO")
+	private TabCashRecordDAO tabCashRecordDao;
+	@Resource(name = "TabIncomeRecordDAO")
+	private TabIncomeRecordDAO tabIncomeRecordDAO;
+	
 	//查询所用户
 	public CLS_VO_Result queryUser(){
 		CLS_VO_Result result = new CLS_VO_Result();
@@ -216,5 +232,113 @@ public class CLS_BO_User {
         fis.close();
         inputSteam.close();
     }
+    
+	/**
+	 * 获取提现记录
+	 * @param user
+	 * @return
+	 */
+	public CLS_VO_Result getCashRecordList(String userID, int pageNo, int pageSize) {
+		
+		CLS_VO_Result result = new CLS_VO_Result();
+		List<CLS_VO_PresentRecord> presentRecotds = new ArrayList<CLS_VO_PresentRecord>();
+		List<CLS_VO_PresentRecord> presentRecotdlist = tabCashRecordDao.getPresentRecordList(userID, pageNo, pageSize);
+		if (presentRecotdlist == null) {
+			result.setRet(CLS_FSAlliance_Error.ERROR_PARAM);
+			result.setContent(presentRecotdlist);
+		} else {
+			Iterator irIterator = presentRecotdlist.iterator();
+			while (irIterator.hasNext()) {
+				Object[] objects= (Object[])irIterator.next();
+				CLS_VO_PresentRecord clsVOPresentRecord = new CLS_VO_PresentRecord();
+				if (objects[0] != null) {
+					clsVOPresentRecord.setId(objects[0].toString());
+				}
+				if (objects[2] != null) {
+					clsVOPresentRecord.setState(Integer.parseInt(objects[2].toString()));
+				}
+				if (objects[3] != null) {
+					
+					clsVOPresentRecord.setPresentTime(objects[3].toString());
+				}
+				if (objects[4] != null) {
+					clsVOPresentRecord.setPresentMoneny(objects[4].toString());
+				}
+				presentRecotds.add(clsVOPresentRecord);
+			}
+			result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+			result.setContent(presentRecotds);
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 获取收入记录
+	 * @param user
+	 * @return
+	 */
+	public CLS_VO_Result getIncomeRecordList(String userID, int pageNo, int pageSize) {
+		
+		CLS_VO_Result result = new CLS_VO_Result();
+		List<CLS_VO_IncomeRecord> incomeRecords = new ArrayList<CLS_VO_IncomeRecord>();
+		List<CLS_VO_IncomeRecord> incomeRecordsList = tabIncomeRecordDAO.getIncomeRecordList(userID, pageNo, pageSize);
+		if (incomeRecordsList == null) {
+			result.setRet(CLS_FSAlliance_Error.ERROR_PARAM);
+			result.setContent(incomeRecordsList);
+		} else {
+			Iterator irIterator = incomeRecordsList.iterator();
+			while (irIterator.hasNext()) {
+				Object[] objects= (Object[])irIterator.next();
+				CLS_VO_IncomeRecord clsVOIncomeRecord = new CLS_VO_IncomeRecord();
+				if (objects[0] != null) {
+					clsVOIncomeRecord.setId(objects[0].toString());
+				}
+				if (objects[2] != null) {
+					clsVOIncomeRecord.setType(Integer.parseInt(objects[2].toString()));
+				}
+				if (objects[3] != null) {
+					
+					clsVOIncomeRecord.setIncomeTime(objects[3].toString());
+				}
+				if (objects[4] != null) {
+					clsVOIncomeRecord.setIncomeMoneny(objects[4].toString());
+				}
+				incomeRecords.add(clsVOIncomeRecord);
+			}
+			result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+			result.setContent(incomeRecords);
+		}
+		return result;
+	}
+	
+	/**
+	 * 提现
+	 * @param user
+	 * @return
+	 */
+	public CLS_VO_Result updateBalance(String userId, Double money) {
+		
+		CLS_VO_Result result = new CLS_VO_Result();
+		int ret = tabUserDAO.updateBalance(userId, money);
+		if (ret > 0) {
+			TabCashRecord tabCashRecord = new TabCashRecord();
+			String id = UUID.randomUUID().toString();
+			tabCashRecord.setIId(id);
+			tabCashRecord.setSUserId(userId);
+			Timestamp ts = Timestamp.valueOf(Tools.translateTime(new Date()));  
+			tabCashRecord.setDtCashTime(ts);
+			tabCashRecord.setDCashBalanceNum(money);
+			tabCashRecord.setICashStatus(0);
+			tabCashRecordDao.save(tabCashRecord);
+			TabUser tabUser = tabUserDAO.findById(userId);
+			result.setRet(CLS_FSAlliance_Error.ERROR_OK);
+			result.setContent(tabUser);
+		} else {
+			result.setRet(CLS_FSAlliance_Error.ERROR_DB_EXCEPTION);
+			
+		}
+		return result;
+	}
    
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -217,4 +218,22 @@ public class TabCashRecordDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (TabCashRecordDAO) ctx.getBean("TabCashRecordDAO");
 	}
+	
+	
+	/**
+	 * 获取用户提现记录
+	 * @param userId 用户ID
+	 * 
+	 * @return
+	 */
+	public List getPresentRecordList(String userId, int pageNo, int pageSize){
+		StringBuffer strBuf = new StringBuffer();
+		int start = (pageNo - 1) * pageSize;
+		strBuf.append(" SELECT * FROM TAB_CASH_RECORD WHERE S_USER_ID = :userId");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setFirstResult(start).setMaxResults(pageSize);
+		query.setParameter("userId", userId);
+		List list = query.list();
+		return list;
+  } 
 }

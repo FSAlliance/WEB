@@ -6,9 +6,11 @@
 -->
 <hibernate-mapping>
     <class name="com.fsalliance.core.po.TabCashRecord" table="TAB_CASH_RECORD" catalog="FSAlliance">
-        <id name="IId" type="java.lang.Integer">
-            <column name="I_ID" />
+        <id name="IId" type="java.lang.String">
+          
+             <column name="I_ID" length="100" />
             <generator class="assigned" />
+           
         </id>
         <property name="SUserId" type="java.lang.String">
             <column name="S_USER_ID" length="100" not-null="true" />

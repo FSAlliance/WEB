@@ -11,7 +11,7 @@ public class TabIncomeRecord implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	// Fields
 
-	private Integer IId;
+	private String IId;
 
 	private String SUserId;
 
@@ -28,14 +28,14 @@ public class TabIncomeRecord implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public TabIncomeRecord(Integer IId, String SUserId, Integer IIncomeStatus) {
+	public TabIncomeRecord(String IId, String SUserId, Integer IIncomeStatus) {
 		this.IId = IId;
 		this.SUserId = SUserId;
 		this.IIncomeStatus = IIncomeStatus;
 	}
 
 	/** full constructor */
-	public TabIncomeRecord(Integer IId, String SUserId, Integer IIncomeStatus,
+	public TabIncomeRecord(String IId, String SUserId, Integer IIncomeStatus,
 			Timestamp dtIncomeTime, Double DIncomeBalanceNum) {
 		this.IId = IId;
 		this.SUserId = SUserId;
@@ -46,11 +46,11 @@ public class TabIncomeRecord implements java.io.Serializable {
 
 	// Property accessors
 
-	public Integer getIId() {
+	public String getIId() {
 		return this.IId;
 	}
 
-	public void setIId(Integer IId) {
+	public void setIId(String IId) {
 		this.IId = IId;
 	}
 
