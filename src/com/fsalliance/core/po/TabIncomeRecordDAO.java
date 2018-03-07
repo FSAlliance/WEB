@@ -235,5 +235,6 @@ public class TabIncomeRecordDAO extends HibernateDaoSupport {
 		query.setParameter("userId", userId);
 		List list = query.list();
 		return list;
+		
   }  
 }
