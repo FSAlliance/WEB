@@ -41,7 +41,7 @@ import com.fsalliance.core.util.Tools;
 import com.fsalliance.core.vo.CLS_VO_IncomeRecord;
 import com.fsalliance.core.vo.CLS_VO_PresentRecord;
 import com.fsalliance.core.vo.CLS_VO_Result;
-import com.fsalliance.core.vo.CLS_VO_USER_ORDER;
+import com.fsalliance.core.vo.CLS_VO_User_Order;
 import com.fsalliance.core.vo.CLS_VO_User_I;
 
 @Transactional

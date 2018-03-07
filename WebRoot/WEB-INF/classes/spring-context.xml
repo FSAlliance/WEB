@@ -84,6 +84,8 @@
 	<bean name="boFolderTree" class="com.fsalliance.core.bo.CLS_BO_FolderTree"></bean>
 	<bean name="boComputer" class="com.fsalliance.core.bo.CLS_BO_Computer"></bean>
 	<bean name="boIp" class="com.fsalliance.core.bo.CLS_BO_Ip"></bean>
+	<bean name="boOrder" class="com.fsalliance.core.bo.CLS_BO_Order"></bean>
+	
 	<bean name="daoIp" class="com.fsalliance.core.dao.CLS_DAO_Ip">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory"/>

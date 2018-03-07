@@ -3,6 +3,7 @@ package com.fsalliance.core.po;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -10,8 +11,12 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.fsalliance.core.bo.CLS_BO_Order;
+import com.fsalliance.core.vo.CLS_VO_Order;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -327,5 +332,222 @@ public class TabOrderDAO extends HibernateDaoSupport {
 
 	public static TabOrderDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (TabOrderDAO) ctx.getBean("TabOrderDAO");
+	}
+	
+	/**
+	 * 根据订单编号查询订单信息
+	 * @param orderID
+	 */
+	public List<CLS_VO_Order> findOrderById(String orderID) {
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" SELECT * FROM TAB_ORDER WHERE S_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, orderID);
+		List obj = query.list();
+		Iterator iterator = obj.iterator();
+		List<CLS_VO_Order> orderList = new ArrayList<CLS_VO_Order>();
+		while (iterator.hasNext()) {
+			CLS_VO_Order order = new CLS_VO_Order();
+			Object[] object = (Object[]) iterator.next();
+			if (object[0] != null) {
+				order.setId(object[0].toString());
+			}
+			if (object[1] != null) {
+				order.setCreateTime((Timestamp)object[1]);
+			}
+			if (object[2] != null) {
+				order.setAuctionTitle(object[2].toString());
+			}
+			if (object[3] != null) {
+				order.setAuctionId(object[3].toString());
+			}
+			if (object[4] != null) {
+				order.setExnickname(object[4].toString());
+			}
+			if (object[5] != null) {
+				order.setAuctionNum((Integer) object[5]);
+			}
+			if (object[6] != null) {
+				order.setPayPrice((Double)object[6]);
+			}
+			if (object[7] != null) {
+				order.setPayStatus((Integer)object[7]);
+			}
+			if (object[8] != null) {
+				order.setTkbiztag((Integer)object[8]);
+			}
+			if (object[9] != null) {
+				order.setDiscountAndSubsidyToString((Double)object[9]);
+			}
+			if (object[10] != null) {
+				order.setShareRate((Double)object[10]);
+			}
+			if (object[11] != null) {
+				order.setTotalAlipayFeeString((Double)object[11]);
+			}
+			if (object[12] != null) {
+				order.setFeeString((Double)object[12]);
+			}
+			if (object[13] != null) {
+				order.setSettlementAmount((Double)object[13]);
+			}
+			if (object[14] != null) {
+				order.setForecastIncome((Double)object[14]);
+			}
+			if (object[15] != null) {
+				order.setEarningTime((Timestamp)object[15]);
+			}
+			if (object[16] != null) {
+				order.setFinalDiscountTostring((Double)object[16]);
+			}
+			if (object[17] != null) {
+				order.setCommissionAmount((Double)object[17]);
+			}
+			if (object[18] != null) {
+				order.setSubsidyRatio((Double)object[18]);
+			}
+			if (object[19] != null) {
+				order.setSubsidyAmount((Double)object[19]);
+			}
+			if (object[20] != null) {
+				order.setSubsidyType((Integer)object[20]);
+			}
+			if (object[21] != null) {
+				order.setTerminalType((Integer)object[21]);
+			}
+			if (object[22] != null) {
+				order.setThirdService(object[22].toString());
+			}
+			if (object[23] != null) {
+				order.setCategory(object[23].toString());
+			}
+			if (object[24] != null) {
+				order.setSourceMedium(object[24].toString());
+			}
+			if (object[25] != null) {
+				order.setSourceMediumName(object[25].toString());
+			}
+			if (object[26] != null) {
+				order.setAdsenseId(object[26].toString());
+			}
+			if (object[27] != null) {
+				order.setAdsenseName(object[27].toString());
+			}
+			orderList.add(order);
+		}
+		return orderList;
+	}
+	
+	/**
+	 * 根据类型查询订单
+	 * @param userID 用户ID
+	 * @param type 类型
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CLS_VO_Order> findOrderByType(String userID, int type,int pageNo, int pageSize){
+		StringBuffer strBuf = new StringBuffer();
+		int start = (pageNo - 1) * pageSize;
+		strBuf.append(" SELECT * FROM TAB_ORDER WHERE RIGHT(TAB_ORDER.S_ID,4) IN ");
+		strBuf.append("(SELECT TAB_USER_ALIPAY.S_ALIPAY_ORDERID FROM TAB_USER_ALIPAY WHERE TAB_USER_ALIPAY.S_USER_ID = ?)");
+		strBuf.append("AND TAB_ORDER.I_PAY_STATUS = ? ");
+		strBuf.append("ORDER BY TAB_ORDER.DT_CREATE_TIME DESC");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setFirstResult(start).setMaxResults(pageSize);
+		query.setParameter(0, userID);
+		query.setParameter(1, type);
+		List obj = query.list();
+		Iterator iterator = obj.iterator();
+		List<CLS_VO_Order> orderList = new ArrayList<CLS_VO_Order>();
+		while (iterator.hasNext()) {
+			CLS_VO_Order order = new CLS_VO_Order();
+			Object[] object = (Object[]) iterator.next();
+			if (object[0] != null) {
+				order.setId(object[0].toString());
+			}
+			if (object[1] != null) {
+				order.setCreateTime((Timestamp)object[1]);
+			}
+			if (object[2] != null) {
+				order.setAuctionTitle(object[2].toString());
+			}
+			if (object[3] != null) {
+				order.setAuctionId(object[3].toString());
+			}
+			if (object[4] != null) {
+				order.setExnickname(object[4].toString());
+			}
+			if (object[5] != null) {
+				order.setAuctionNum((Integer) object[5]);
+			}
+			if (object[6] != null) {
+				order.setPayPrice((Double)object[6]);
+			}
+			if (object[7] != null) {
+				order.setPayStatus((Integer)object[7]);
+			}
+			if (object[8] != null) {
+				order.setTkbiztag((Integer)object[8]);
+			}
+			if (object[9] != null) {
+				order.setDiscountAndSubsidyToString((Double)object[9]);
+			}
+			if (object[10] != null) {
+				order.setShareRate((Double)object[10]);
+			}
+			if (object[11] != null) {
+				order.setTotalAlipayFeeString((Double)object[11]);
+			}
+			if (object[12] != null) {
+				order.setFeeString((Double)object[12]);
+			}
+			if (object[13] != null) {
+				order.setSettlementAmount((Double)object[13]);
+			}
+			if (object[14] != null) {
+				order.setForecastIncome((Double)object[14]);
+			}
+			if (object[15] != null) {
+				order.setEarningTime((Timestamp)object[15]);
+			}
+			if (object[16] != null) {
+				order.setFinalDiscountTostring((Double)object[16]);
+			}
+			if (object[17] != null) {
+				order.setCommissionAmount((Double)object[17]);
+			}
+			if (object[18] != null) {
+				order.setSubsidyRatio((Double)object[18]);
+			}
+			if (object[19] != null) {
+				order.setSubsidyAmount((Double)object[19]);
+			}
+			if (object[20] != null) {
+				order.setSubsidyType((Integer)object[20]);
+			}
+			if (object[21] != null) {
+				order.setTerminalType((Integer)object[21]);
+			}
+			if (object[22] != null) {
+				order.setThirdService(object[22].toString());
+			}
+			if (object[23] != null) {
+				order.setCategory(object[23].toString());
+			}
+			if (object[24] != null) {
+				order.setSourceMedium(object[24].toString());
+			}
+			if (object[25] != null) {
+				order.setSourceMediumName(object[25].toString());
+			}
+			if (object[26] != null) {
+				order.setAdsenseId(object[26].toString());
+			}
+			if (object[27] != null) {
+				order.setAdsenseName(object[27].toString());
+			}
+			orderList.add(order);
+		}
+		return orderList;
 	}
 }

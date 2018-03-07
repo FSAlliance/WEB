@@ -3,12 +3,14 @@ package com.fsalliance.core.po;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -205,5 +207,28 @@ public class TabUserAlipayDAO extends HibernateDaoSupport {
 	public static TabUserAlipayDAO getFromApplicationContext(
 			ApplicationContext ctx) {
 		return (TabUserAlipayDAO) ctx.getBean("TabUserAlipayDAO");
+	}
+	
+	public List<TabUserAlipay> getUserOrderByUserID(String orderID, String userID) {
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append(" SELECT * FROM TAB_USER_ALIPAY WHERE S_ALIPAY_ORDERID = ? AND S_USER_ID = ? ");
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setParameter(0, orderID);
+		query.setParameter(1, userID);
+		List obj = query.list();
+		Iterator iterator = obj.iterator();
+		List<TabUserAlipay> tabUserAlipayList = new ArrayList<TabUserAlipay>();
+		while (iterator.hasNext()) {
+			TabUserAlipay tabUserAlipay = new TabUserAlipay();
+			Object[] object = (Object[]) iterator.next();
+			if (object[0] != null) {
+				tabUserAlipay.setSAlipayOrderid(object[0].toString());
+			}
+			if (object[1] != null) {
+				tabUserAlipay.setSUserId(object[1].toString());
+			}
+			tabUserAlipayList.add(tabUserAlipay);
+		}
+		return tabUserAlipayList;
 	}
 }

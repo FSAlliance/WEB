@@ -229,7 +229,7 @@ public class TabIncomeRecordDAO extends HibernateDaoSupport {
 	public List getIncomeRecordList(String userId, int pageNo, int pageSize){
 		StringBuffer strBuf = new StringBuffer();
 		int start = (pageNo - 1) * pageSize;
-		strBuf.append(" SELECT * FROM TAB_INCOME_RECORD WHERE S_USER_ID = :userId");
+		strBuf.append(" SELECT * FROM TAB_INCOME_RECORD  WHERE S_USER_ID = :userId ORDER BY DT_INCOME_TIME desc" );
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
 		query.setFirstResult(start).setMaxResults(pageSize);
 		query.setParameter("userId", userId);
