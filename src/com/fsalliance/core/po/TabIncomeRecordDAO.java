@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -217,4 +218,23 @@ public class TabIncomeRecordDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (TabIncomeRecordDAO) ctx.getBean("TabIncomeRecordDAO");
 	}
+	
+	
+	/**
+	 * 获取用户收入记录
+	 * @param userId 用户ID
+	 * 
+	 * @return
+	 */
+	public List getIncomeRecordList(String userId, int pageNo, int pageSize){
+		StringBuffer strBuf = new StringBuffer();
+		int start = (pageNo - 1) * pageSize;
+		strBuf.append(" SELECT * FROM TAB_INCOME_RECORD  WHERE S_USER_ID = :userId ORDER BY DT_INCOME_TIME desc" );
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(strBuf.toString());
+		query.setFirstResult(start).setMaxResults(pageSize);
+		query.setParameter("userId", userId);
+		List list = query.list();
+		return list;
+		
+  }  
 }

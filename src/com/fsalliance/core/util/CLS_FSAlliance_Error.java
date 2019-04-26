@@ -18,6 +18,7 @@ public class CLS_FSAlliance_Error {
     public static final int ERROR_USER_INFO = -13;          //用户名或密码错误
     public static final int ERROR_PASSWORD_MODIFY_FAILED = -14;   //密码修改失败
 	public static final int ERROR_USERID_EXIST = -15;      //用户id已经存在
-	
-	
+	public static final int ERROR_ORDER_MAX = -16;      //超出最大个数
+	public static final int ERROR_ORDER_HAVE = -17;      //淘宝账号已经存在
+	public static final int ERROR_ORDER_NO_HAVE = -18;      //没有该订单
 }

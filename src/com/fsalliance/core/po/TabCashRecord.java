@@ -11,7 +11,7 @@ public class TabCashRecord implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	// Fields
 
-	private Integer IId;
+	private String IId;
 
 	private String SUserId;
 
@@ -28,14 +28,14 @@ public class TabCashRecord implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public TabCashRecord(Integer IId, String SUserId, Integer ICashStatus) {
+	public TabCashRecord(String IId, String SUserId, Integer ICashStatus) {
 		this.IId = IId;
 		this.SUserId = SUserId;
 		this.ICashStatus = ICashStatus;
 	}
 
 	/** full constructor */
-	public TabCashRecord(Integer IId, String SUserId, Integer ICashStatus,
+	public TabCashRecord(String IId, String SUserId, Integer ICashStatus,
 			Timestamp dtCashTime, Double DCashBalanceNum) {
 		this.IId = IId;
 		this.SUserId = SUserId;
@@ -46,12 +46,12 @@ public class TabCashRecord implements java.io.Serializable {
 
 	// Property accessors
 
-	public Integer getIId() {
+	public String getIId() {
 		return this.IId;
 	}
 
-	public void setIId(Integer IId) {
-		this.IId = IId;
+	public void setIId(String id) {
+		this.IId = id;
 	}
 
 	public String getSUserId() {

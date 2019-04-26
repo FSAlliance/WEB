@@ -8,10 +8,15 @@
 
 	<session-factory>
 		<mapping resource="com/fsalliance/core/po/TabUser.hbm.xml" />
+		<mapping resource="com/fsalliance/core/po/TabUserAlipay.hbm.xml" />
 		<mapping resource="com/fsalliance/core/po/TabFile.hbm.xml" />
+		<mapping resource="com/fsalliance/core/po/TabCashRecord.hbm.xml" />
+		<mapping resource="com/fsalliance/core/po/TabIncomeRecord.hbm.xml" />
 		<mapping
 			resource="com/fsalliance/core/po/TabComputer.hbm.xml" />
 		<mapping resource="com/fsalliance/core/po/TabIp.hbm.xml" />
+		<mapping resource="com/fsalliance/core/po/TabOrder.hbm.xml" />
+		
 	</session-factory>
 
 </hibernate-configuration>

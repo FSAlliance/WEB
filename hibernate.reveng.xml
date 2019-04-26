@@ -10,5 +10,6 @@
 	<sql-type jdbc-type="INTEGER" hibernate-type="java.lang.Long"></sql-type>
 	<sql-type jdbc-type="FLOAT" hibernate-type="java.lang.Double"></sql-type>
 	<sql-type jdbc-type="DOUBLE" hibernate-type="java.lang.Long"></sql-type>
+	<sql-type jdbc-type="VARCHAR" hibernate-type="string"></sql-type>
 </type-mapping>
 </hibernate-reverse-engineering>
